@@ -1,0 +1,39 @@
+<style>
+  body {
+    background: "blue"
+  }
+  .win-title {
+    color: #28a745;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .word-reveal {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+    text-align: center;
+    margin: 30px 0;
+    letter-spacing: 5px;
+  }
+  .message {
+    color: #666;
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .play-again {
+    text-align: center;
+    margin-top: 20px;
+  }
+</style>
+
+<h1 class="win-title">You Win!</h1>
+<p class="message">Congratulations - You guessed the word:</p>
+<div class="word-reveal"><%= @game.word.upcase %></div>
+<p class="message">You made <strong><%= @game.wrong_guesses.length %></strong> wrong guess<%= @game.wrong_guesses.length == 1 ? '' : 'es' %>.</p>
+<div class="play-again">
+  <form action="/create" method="post">
+    <button type="submit">Play Again</button>
+  </form>
+</div>

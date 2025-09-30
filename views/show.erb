@@ -1,0 +1,158 @@
+<style>
+  .word-display {
+    font-family: 'Courier New', monospace;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    color: #667eea;
+    margin: 30px 0;
+    letter-spacing: 10px;
+  }
+  .game-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 30px 0;
+  }
+  .info-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .info-box h3 {
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .info-box .value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  .letters {
+    margin: 20px 0;
+    text-align: center;
+  }
+  .letters h3 {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  .letter-list {
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 5px;
+  }
+  .letter-list.wrong {
+    color: #dc3545;
+  }
+  .letter-list.correct {
+    color: #28a745;
+  }
+  .guess-form {
+    margin: 30px 0;
+    text-align: center;
+  }
+  .guess-form label {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  .input-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  input[type="text"] {
+    padding: 15px;
+    font-size: 1.5rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    width: 80px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  .new-game {
+    background-color: blue;
+    margin-top: 20px;
+  }
+  .hint {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    color: #666;
+  }
+</style>
+
+<h1>Word Guesser Game</h1>
+
+<div class="word-display">
+  <span class="word"><%= @game.word_with_guesses %></span>
+</div>
+
+<div class="game-info">
+  <div class="info-box">
+    <h3>Wrong Guesses</h3>
+    <div class="value"><%= @game.wrong_guesses.length %> / 7</div>
+  </div>
+  <div class="info-box">
+    <h3>Total Guesses</h3>
+    <div class="value"><%= (@game.guesses.length + @game.wrong_guesses.length) %></div>
+  </div>
+</div>
+
+<% if @game.wrong_guesses.length > 0 %>
+  <div class="letters">
+    <h3>Wrong Letters:</h3>
+    <div class="letter-list wrong">
+      <span class="guesses"><%= @game.wrong_guesses.chars.join(', ') %></span>
+    </div>
+  </div>
+<% end %>
+
+<% if @game.guesses.length > 0 %>
+  <div class="letters">
+    <h3>Correct Letters:</h3>
+    <div class="letter-list correct"><%= @game.guesses.chars.join(' ') %></div>
+  </div>
+<% end %>
+
+<form action="/guess" method="post" class="guess-form">
+  <label for="guess-input">Guess a letter:</label>
+  <div class="input-group">
+    <input type="text" name="guess" id="guess-input" maxlength="1" pattern="[A-Za-z]" 
+           placeholder="?" required autofocus autocomplete="off">
+    <button type="submit">Guess!</button>
+  </div>
+</form>
+
+<form action="/create" method="post" style="text-align: center;">
+  <button type="submit" class="new-game">New Game</button>
+</form>
+
+<div class="hint">
+  <p>Guess letters to reveal the word. You have 7 wrong guesses!</p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('guess-input');
+    if (input) {
+      input.focus();
+      input.addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+      });
+    }
+  });
+</script>

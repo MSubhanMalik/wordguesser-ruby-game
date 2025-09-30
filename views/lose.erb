@@ -1,0 +1,40 @@
+<style>
+  body {
+    background: red;
+  }
+  .lose-title {
+    color: #dc3545;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .word-reveal {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+    text-align: center;
+    margin: 30px 0;
+    letter-spacing: 5px;
+  }
+  .message {
+    color: #666;
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .try-again {
+    text-align: center;
+    margin-top: 20px;
+  }
+</style>
+
+<h1 class="lose-title">Sorry, you lose</h1>
+<p class="message">Sorry, you ran out of guesses!</p>
+<p class="message">The word was:</p>
+<div class="word-reveal"><%= @game.word.upcase %></div>
+<p class="message">Better luck next time</p>
+<div class="try-again">
+  <form action="/create" method="post">
+    <button type="submit">Try Again</button>
+  </form>
+</div>
