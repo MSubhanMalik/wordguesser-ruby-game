@@ -1,10 +1,4 @@
 class WordGuesserGame
-
-  # add the necessary class methods, attributes, etc. here
-  # to make the tests in spec/wordguesser_game_spec.rb pass.
-
-  # Get a word from remote "random word" service
-
   def initialize(word)
     @word = word
     @guesses = ''
@@ -14,16 +8,12 @@ class WordGuesserGame
   attr_accessor :word, :guesses, :wrong_guesses
 
   def guess(letter)
-    if letter.nil? || letter.to_s.empty?
+    if letter.nil? || letter.to_s.empty? || !(letter =~ /^[a-zA-Z]$/)
       return "Invalid guess."
     end
-    
-    letter = letter.to_s.downcase
-    
-    unless letter.match?(/[a-z]/)
-      return "Invalid guess."
-    end
-    
+
+    letter = letter.downcase
+
     if @guesses.include?(letter) || @wrong_guesses.include?(letter)
       return "You have already used that letter."
     end
@@ -33,31 +23,21 @@ class WordGuesserGame
     else
       @wrong_guesses += letter
     end
-    
-    ""
+
+    ""  
   end
 
-  # Original method that raises exceptions for web app compatibility
   def guess_with_exception(letter)
-    # Validate input
-    raise ArgumentError, 'Letter cannot be nil or empty' if letter.nil? || letter.empty?
-    
-    letter = letter.downcase
-    
-   
-    raise ArgumentError, 'Invalid letter' unless letter.match?(/[a-z]/)
-    
-    
-    return false if @guesses.include?(letter) || @wrong_guesses.include?(letter)
-    
-    
-    if @word.include?(letter)
-      @guesses += letter
+    result = guess(letter)
+
+    case result
+    when "Invalid guess."
+      raise ArgumentError, "Invalid guess."
+    when "You have already used that letter."
+      false
     else
-      @wrong_guesses += letter
+      true
     end
-    
-    true
   end
 
   def word_with_guesses
@@ -78,7 +58,6 @@ class WordGuesserGame
     :play
   end
 
-
   def self.get_random_word
     require 'uri'
     require 'net/http'
@@ -87,5 +66,4 @@ class WordGuesserGame
       return http.post(uri, "").body
     }
   end
-
 end
