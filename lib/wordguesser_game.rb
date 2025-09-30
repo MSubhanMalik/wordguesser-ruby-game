@@ -14,6 +14,31 @@ class WordGuesserGame
   attr_accessor :word, :guesses, :wrong_guesses
 
   def guess(letter)
+    if letter.nil? || letter.to_s.empty?
+      return "Invalid guess."
+    end
+    
+    letter = letter.to_s.downcase
+    
+    unless letter.match?(/[a-z]/)
+      return "Invalid guess."
+    end
+    
+    if @guesses.include?(letter) || @wrong_guesses.include?(letter)
+      return "You have already used that letter."
+    end
+
+    if @word.include?(letter)
+      @guesses += letter
+    else
+      @wrong_guesses += letter
+    end
+    
+    ""
+  end
+
+  # Original method that raises exceptions for web app compatibility
+  def guess_with_exception(letter)
     # Validate input
     raise ArgumentError, 'Letter cannot be nil or empty' if letter.nil? || letter.empty?
     

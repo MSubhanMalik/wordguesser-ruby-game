@@ -60,7 +60,7 @@ class WordGuesserApp < Sinatra::Base
     letter = params[:guess].to_s[0]
     
     begin
-      if @game.guess(letter)
+      if @game.guess_with_exception(letter)
         redirect '/show'
       else
         flash[:message] = "You have already used that letter."
