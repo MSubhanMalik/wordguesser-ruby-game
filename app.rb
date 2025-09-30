@@ -57,21 +57,20 @@ class WordGuesserApp < Sinatra::Base
   end
   
   post '/guess' do
-    letter = params[:guess].to_s[0]
-    
-    begin
-      if @game.guess_with_exception(letter)
-        redirect '/show'
-      else
-        flash[:message] = "You have already used that letter."
-        redirect '/show'
-      end
-    rescue ArgumentError
-      flash[:message] = "Invalid guess."
+  letter = params[:guess].to_s[0]
+  
+  begin
+    if @game.guess(letter)  # Changed from guess_with_exception
+      redirect '/show'
+    else
+      flash[:message] = "You have already used that letter."
       redirect '/show'
     end
+  rescue ArgumentError
+    flash[:message] = "Invalid guess."
+    redirect '/show'
   end
-  
+end
   get '/show' do
     status = @game.check_win_or_lose
     
