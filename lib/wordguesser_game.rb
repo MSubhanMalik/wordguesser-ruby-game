@@ -8,36 +8,25 @@ class WordGuesserGame
   attr_accessor :word, :guesses, :wrong_guesses
 
   def guess(letter)
-    if letter.nil? || letter.to_s.empty? || !(letter =~ /^[a-zA-Z]$/)
-      return "Invalid guess."
-    end
-
+    # Validate input - raise ArgumentError for nil or empty
+    raise ArgumentError, 'Invalid guess.' if letter.nil? || letter.empty?
+    
     letter = letter.downcase
-
-    if @guesses.include?(letter) || @wrong_guesses.include?(letter)
-      return "You have already used that letter."
-    end
-
+    
+    # Check if it's a valid letter (a-z only)
+    raise ArgumentError, 'Invalid guess.' unless letter.match?(/[a-z]/)
+    
+    # Check if already guessed - return false (not an error)
+    return false if @guesses.include?(letter) || @wrong_guesses.include?(letter)
+    
+    # Process the valid new guess
     if @word.include?(letter)
       @guesses += letter
     else
       @wrong_guesses += letter
     end
-
-    ""  
-  end
-
-  def guess_with_exception(letter)
-    result = guess(letter)
-
-    case result
-    when "Invalid guess."
-      raise ArgumentError, "Invalid guess."
-    when "You have already used that letter."
-      false
-    else
-      true
-    end
+    
+    true  # Return true for successful new guess
   end
 
   def word_with_guesses
