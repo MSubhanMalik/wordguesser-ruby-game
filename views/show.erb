@@ -97,6 +97,12 @@
 
 <h1>Word Guesser Game</h1>
 
+<% if flash[:message] %>
+  <div class="flash-message" style="background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center;">
+    <%= flash[:message] %>
+  </div>
+<% end %>
+
 <div class="word-display">
   <span class="word"><%= @game.word_with_guesses %></span>
 </div>
@@ -116,7 +122,7 @@
   <div class="letters">
     <h3>Wrong Letters:</h3>
     <div class="letter-list wrong">
-      <span class="guesses"><%= @game.wrong_guesses.chars.join(', ') %></span>
+      <span class="guesses"><%= @game.wrong_guesses %></span>
     </div>
   </div>
 <% end %>
